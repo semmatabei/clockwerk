@@ -52,8 +52,12 @@ export default class Cron {
     this._action();
     // So next _getTimeout will calculate new schedule for next run cycle
     this._timeoutCalculated = false;
-    // For `run once` case, the timeout expected to be < 0, so the cron will stop immediately
-    this.runScheduling();
+    // Make sure un-repetitive job will not call runScheduling after executed
+    if (this._schedule.isRepetitive()) {
+      this.runScheduling();
+    } else {
+      this.stop();
+    }
   }
 
   // Always return

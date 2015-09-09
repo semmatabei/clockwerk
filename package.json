@@ -39,5 +39,8 @@
     "mocha": "^2.3.2",
     "sinon": "^1.16.1",
     "sinon-chai": "^2.8.0"
+  },
+  "dependencies": {
+    "cron-parser": "^0.7.1"
   }
 }
