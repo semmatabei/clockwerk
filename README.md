@@ -1,4 +1,4 @@
-# clockwerk
+# clockwerk [![Build Status](https://travis-ci.org/semmatabei/clockwerk.svg?branch=master)](https://travis-ci.org/semmatabei/clockwerk)
 
 Simple nodejs cron job scheduler.
 
