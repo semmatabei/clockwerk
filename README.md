@@ -22,16 +22,6 @@ let cronJob = new Cron(
 cronJob.runScheduling();
 ```
 
-## Parameters
-
-| Name       | Type     | Example           |
-| ---------- | -------- | ----------------- |
-| Name       | string   | 'Cron Job'        |
-| Date       | date     | new Date()        |
-|            | string   | '*/5 * * * * * '  |
-| Action     | Function |                   |
-| OnComplete | Function |                   |
-
 ## Crontab Instruction
 
 ```bash
