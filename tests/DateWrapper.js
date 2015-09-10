@@ -36,4 +36,18 @@ describe('DateWrapper', () => {
 
   });
 
+  describe('Use wrong Cron rule', () => {
+
+    var date = 'a * * * * *';
+
+    it('should be fail', () => {
+      try {
+        var wrappedDate = new DateWrapper(date);
+      } catch (e) {
+        true.should.be.True;
+      }
+    });
+
+  });
+
 });

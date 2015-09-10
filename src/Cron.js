@@ -17,32 +17,34 @@ export default class Cron {
 
   /**
    *
+   * @param {string} name
    * @param {string|Date} schedule
    * @param {Function} action
+   * @param {Function=} onComplete
    */
-  constructor(schedule, action) {
-    this.CRON_STATUS = {
-      RUNNING: 'running',
-      STOPPED: 'stopped'
-    };
-
+  constructor(name, schedule, action, onComplete) {
+    this._name = name;
     this._action = action;
     this._schedule = new DateWrapper(schedule);
+    if (onComplete) {
+      this._onComplete = onComplete;
+    }
 
-    this._remainingTime = 0;
     this._timeoutCalculated = false;
   }
 
-  runScheduling() {
-    this._status = this.CRON_STATUS.RUNNING;
-    var timeout = this._getTimeout();
+  static get CRON_STATUS() {
+    return {
+      RUNNING: 'running',
+      STOPPED: 'stopped'
+    };
+  }
 
+  runScheduling() {
+    this._status = Cron.CRON_STATUS.RUNNING;
+    var timeout = this._getTimeout();
     if (timeout >= 0) {
-      if (timeout > 0) {
-        this._timeoutAction = setTimeout(() => this.runScheduling(), timeout);
-      } else {
-        this.executeAction();
-      }
+      this._timeoutAction = setTimeout(() => this.executeAction(), timeout);
     } else {
       this.stop();
     }
@@ -60,7 +62,14 @@ export default class Cron {
     }
   }
 
-  // Always return
+  /**
+   * Possible return :
+   * < 0 : Will stop the cron for single run task. Will get next schedule for repetitive task
+   * >= 0 : Will setTimeout to execute action
+   *
+   * @returns {number}
+   * @private
+   */
   _getTimeout() {
     var MAX_DELAY = 2147483647;
     let timeout = 0;
@@ -74,25 +83,16 @@ export default class Cron {
 
       if (this._schedule.isRepetitive()) {
         while (nextTime < currentTime) {
-          // keep incr the schedule until it's in the future
+          // keep increment the schedule until it's > current time, this means the timeout returned for repetitive task will never < 0
           nextTime = this._schedule.next();
         }
       }
 
-      this._remainingTime = Math.max(-1, nextTime - currentTime);
+      timeout = Math.max(-1, nextTime - currentTime);
     }
 
-    if (this._remainingTime > 0) {
-      if (this._remainingTime > MAX_DELAY) {
-        this._remainingTime -= MAX_DELAY;
-        timeout = MAX_DELAY;
-      } else {
-        timeout = this._remainingTime;
-        this._remainingTime = 0;
-      }
-    } else {
-      // Will stop the cron job if next schedule is in the past
-      timeout = this._remainingTime;
+    if (timeout > MAX_DELAY) {
+      timeout = -1;
     }
 
     return timeout;
@@ -101,15 +101,18 @@ export default class Cron {
   stop() {
     if (this._timeoutAction) {
       clearTimeout(this._timeoutAction);
+
+      if (this._onComplete) {
+        this._onComplete();
+      }
     }
-    this._status = this.CRON_STATUS.STOPPED;
+    this._status = Cron.CRON_STATUS.STOPPED;
   }
 
   getStatus() {
     switch (this._status) {
-      case this.CRON_STATUS.RUNNING: return 'Job is running';
-      case this.CRON_STATUS.STOPPED: return 'Job not running';
-      default: return 'Status unrecognized';
+      case Cron.CRON_STATUS.RUNNING: return 'Job is running';
+      default: return 'Job not running';
     }
   }
 
