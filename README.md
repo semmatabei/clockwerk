@@ -2,7 +2,7 @@
 
 Simple nodejs cron job scheduler.
 
-## Usage
+## Usage (ES6)
 ```js
 import Cron from 'clockwerk'
 
@@ -15,6 +15,26 @@ let cronJob = new Cron(
 
   },
   () => {               // OnComplete: Function(Optional)
+
+    // Action to run on job completed/stopped.
+
+  });
+cronJob.runScheduling();
+```
+
+## Usage (ES5)
+```js
+var Cron = require('clockwerk')
+
+var cronJob = new Cron(
+  'Cron Job Name',
+  '*/5 * * * * *',
+  function () {
+
+    // Job to execute
+
+  },
+  function () {
 
     // Action to run on job completed/stopped.
 
