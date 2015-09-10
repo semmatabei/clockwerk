@@ -4,7 +4,7 @@ Simple nodejs cron job scheduler.
 
 ## Usage (ES6)
 ```js
-import Cron from 'clockwerk'
+import { Cron } from 'clockwerk'
 
 let cronJob = new Cron(
   'Cron Job Name',      // Name:    string
@@ -24,7 +24,7 @@ cronJob.runScheduling();
 
 ## Usage (ES5)
 ```js
-var Cron = require('clockwerk')
+var Cron = require('clockwerk').Cron;
 
 var cronJob = new Cron(
   'Cron Job Name',
