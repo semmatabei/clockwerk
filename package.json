@@ -1,6 +1,6 @@
 {
   "name": "clockwerk",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Node js job scheduler (Cron)",
   "main": "lib/index.js",
   "scripts": {
