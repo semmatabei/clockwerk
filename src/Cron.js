@@ -42,7 +42,7 @@ export default class Cron {
 
   runScheduling() {
     this._status = Cron.CRON_STATUS.RUNNING;
-    var timeout = this._getTimeout();
+    const timeout = this._getTimeout();
     if (timeout >= 0) {
       this._timeoutAction = setTimeout(() => this.executeAction(), timeout);
     } else {
@@ -71,7 +71,7 @@ export default class Cron {
    * @private
    */
   _getTimeout() {
-    var MAX_DELAY = 2147483647;
+    const MAX_DELAY = 2147483647;
     let timeout = 0;
 
     if (!this._timeoutCalculated) {
@@ -79,7 +79,7 @@ export default class Cron {
       this._timeoutCalculated = true;
 
       let nextTime = this._schedule.next();
-      let currentTime = new Date();
+      const currentTime = new Date();
 
       if (this._schedule.isRepetitive()) {
         while (nextTime < currentTime) {
