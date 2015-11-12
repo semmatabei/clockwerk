@@ -13,7 +13,7 @@ export default class DateWrapper {
         this._date = CronParser.parseExpression(date);
         // To force new job can't run immediately
         this._date.next();
-      } catch(e) {
+      } catch (e) {
         throw new TypeError('Failed to parse cron schedule rule');
       }
     }
